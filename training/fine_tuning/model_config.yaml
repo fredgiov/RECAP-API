@@ -1,0 +1,2 @@
+model_name: distilbert-base-uncased
+num_epochs: 1
