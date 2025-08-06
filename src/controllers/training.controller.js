@@ -1,7 +1,7 @@
 const trainingService = require('../services/trainingService');
 const dataService = require('../services/dataService');
 const logger = require('../utils/logger');
-const { v4: uuidv4 } = require('uuid');
+const { randomUUID } = require('crypto');
 
 class TrainingController {
   // Collect conversation data for training
@@ -17,7 +17,7 @@ class TrainingController {
       }
 
       const trainingData = {
-        id: uuidv4(),
+        id: randomUUID(),
         conversation_id,
         messages,
         context: context || {},

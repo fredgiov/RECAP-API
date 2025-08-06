@@ -1,47 +1,40 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-const chatController = require('./src/controllers/chat.controller');
-const { errorHandler } = require('./src/utils/errorHandler');
-const logger = require('./src/utils/logger');
+const { handleChat } = require('./controllers/chat.controller');
+const logger = require('./utils/logger');
 
-const app = express();
+async function route(req, res) {
+  if (req.method === 'GET' && req.url === '/health') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'healthy', timestamp: new Date().toISOString() }));
+    return;
+  }
 
-// Security & CORS
-app.use(helmet());
-app.use(cors({
-  origin: process.env.RECAP_DOMAIN || '*',
-  methods: ['POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+  if (req.method === 'POST' && (req.url === '/chat' || req.url === '/api/chat')) {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+    });
+    req.on('end', async () => {
+      try {
+        const data = JSON.parse(body || '{}');
+        const result = await handleChat(data);
+        res.writeHead(result.status, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result.body));
+      } catch (err) {
+        logger.error('Invalid request', err);
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          response: '',
+          timestamp: new Date().toISOString(),
+          status: 'error',
+          error_message: 'Invalid JSON'
+        }));
+      }
+    });
+    return;
+  }
 
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: { error: 'Too many requests, please try again later.' }
-});
-app.use(limiter);
+  res.writeHead(404, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({ error: 'Not found' }));
+}
 
-// Body parsing
-app.use(express.json({ limit: '10mb' }));
-
-// Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'healthy', timestamp: new Date().toISOString() });
-});
-
-// Main chat endpoint
-app.post('/chat', chatController.handleChat);
-app.post('/api/chat', chatController.handleChat); // Alternative endpoint
-
-// Error handling
-app.use(errorHandler);
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  logger.info(`RECAP API running on port ${PORT}`);
-});
-
-module.exports = app;
+module.exports = { route };

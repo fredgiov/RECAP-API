@@ -12,7 +12,8 @@ logs/
 *.log
 
 # Database
-data/
+data/*
+!data/.gitignore
 *.db
 *.sqlite
 
