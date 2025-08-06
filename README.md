@@ -39,3 +39,9 @@ npm run train
 ```bash
 npm start
 ```
+
+### 6. Remote Model Configuration
+Set the `MODEL_SERVER_URL` environment variable to the HTTP endpoint of your
+external model server (e.g., `http://BIG_MAC_IP:5000/chat`). When set, the API
+will forward chat requests to that service and fall back to the latest local
+model if unreachable.

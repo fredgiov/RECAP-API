@@ -7,7 +7,6 @@ const chatController = require('./controllers/chat.controller');
 
 // Utilities
 const { errorHandler } = require('./utils/errorHandler');
-const logger = require('./utils/logger');
 const sequelize = require('./config');
 
 const app = express();
@@ -45,10 +44,5 @@ app.post('/api/chat', chatController.handleChat); // Alternative endpoint
 
 // Error handling
 app.use(errorHandler);
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  logger.info(`RECAP API running on port ${PORT}`);
-});
 
 module.exports = app;

@@ -4,8 +4,8 @@
   "description": "Custom AI model and API for RECAP learning assistant",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
     "test": "jest",
     "train": "node training/data_collection/synthetic_generator.js",
     "collect-data": "node training/data_collection/conversation_logger.js"

@@ -1,8 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const ModelVersion = require('../models/ModelVersion');
-const logger = require('../utils/logger');
-
 let cachedModel = null;
 
 async function loadModel() {
