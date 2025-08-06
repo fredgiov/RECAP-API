@@ -20,6 +20,11 @@ npm install
 pip install -r requirements.txt
 ```
 
+### 2. Run Tests
+```bash
+npm test
+```
+
 ### 2. Environment Setup
 ```bash
 cp .env.example .env

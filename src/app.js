@@ -30,12 +30,17 @@ app.use(limiter);
 // Body parsing
 app.use(express.json({ limit: '10mb' }));
 
+// Initialize database tables on startup for simplicity
+// In production, migrations should be handled separately
 // Initialize database tables
 sequelize.sync();
 
 // Health check
 app.get('/health', (req, res) => {
-  res.json({ status: 'healthy', timestamp: new Date().toISOString() });
+  res.json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // Main chat endpoint
