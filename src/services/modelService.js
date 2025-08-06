@@ -1,11 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const axios = require('axios');
-const ModelVersion = require('../models/ModelVersion');
-const logger = require('../utils/logger');
-
-const REMOTE_MODEL_URL = process.env.MODEL_SERVER_URL;
-
 let cachedModel = null;
 
 async function loadModel() {
@@ -30,21 +24,6 @@ async function loadModel() {
 }
 
 async function generateResponse(message, educationalContext, history) {
-  if (REMOTE_MODEL_URL) {
-    try {
-      const { data } = await axios.post(REMOTE_MODEL_URL, {
-        message,
-        context: educationalContext,
-        conversation_history: history,
-      });
-      if (data && data.response) {
-        return data.response;
-      }
-    } catch (err) {
-      logger.error('Remote model request failed', err);
-    }
-  }
-
   const model = await loadModel();
   let rolePrefix = 'Student helper:';
   if (educationalContext.user_role === 'teacher') rolePrefix = 'Instructor reply:';
