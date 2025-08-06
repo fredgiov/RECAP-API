@@ -2,9 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const chatController = require('./src/controllers/chat.controller');
-const { errorHandler } = require('./src/utils/errorHandler');
-const logger = require('./src/utils/logger');
+// Controllers
+const chatController = require('./controllers/chat.controller');
+
+// Utilities
+const { errorHandler } = require('./utils/errorHandler');
+const logger = require('./utils/logger');
+const sequelize = require('./config');
 
 const app = express();
 
@@ -26,6 +30,9 @@ app.use(limiter);
 
 // Body parsing
 app.use(express.json({ limit: '10mb' }));
+
+// Initialize database tables
+sequelize.sync();
 
 // Health check
 app.get('/health', (req, res) => {
