@@ -31,3 +31,4 @@ function filterContent(message) {
 }
 
 module.exports = { validateRequest, filterContent };
+module.exports = { validateRequest, filterContent };

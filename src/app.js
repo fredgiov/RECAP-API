@@ -32,6 +32,7 @@ app.use(express.json({ limit: '10mb' }));
 
 // Initialize database tables on startup for simplicity
 // In production, migrations should be handled separately
+// Initialize database tables
 sequelize.sync();
 
 // Health check

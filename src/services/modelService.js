@@ -45,7 +45,7 @@ async function generateResponse(message, educationalContext, history) {
     }
   }
 
-  const model = await loadModel();
+const model = await loadModel();
   let rolePrefix = 'Student helper:';
   if (educationalContext.user_role === 'teacher') rolePrefix = 'Instructor reply:';
   if (educationalContext.user_role === 'admin') rolePrefix = 'Admin reply:';

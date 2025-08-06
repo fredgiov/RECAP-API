@@ -11,4 +11,7 @@ const server = app.listen(PORT, HOST, () => {
 // Graceful shutdown
 process.on('SIGINT', () => {
   server.close(() => process.exit(0));
+=======
+app.listen(PORT, () => {
+  logger.info(`RECAP API running on port ${PORT}`);
 });
