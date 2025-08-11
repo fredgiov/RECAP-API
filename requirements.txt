@@ -6,3 +6,5 @@ whisper
 ollama
 boto3
 numpy
+pypdf
+nbformat
